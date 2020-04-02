@@ -23,36 +23,15 @@
 
 package jeeves.config.springutil;
 
-import jeeves.server.UserSession;
-import jeeves.server.sources.http.JeevesServlet;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import org.springframework.security.core.AuthenticationException;
 
 /**
- * Clears the UserSession
+ * Exception that indicates a user which was logged into one node is now visiting a different node.
  *
- * @author jeichar
+ * User: Jesse Date: 11/26/13 Time: 3:56 PM
  */
-public class LogoutUserSessionHandler implements LogoutHandler {
-
-    @Override
-    public void logout(HttpServletRequest request,
-                       HttpServletResponse response, Authentication authentication) {
-        HttpSession httpSession = request.getSession(false);
-        if (httpSession != null) {
-            Object tmp = httpSession.getAttribute(JeevesServlet.USER_SESSION_ATTRIBUTE_KEY);
-            if (tmp instanceof UserSession) {
-                UserSession userSession = (UserSession) tmp;
-                userSession.clear();
-            }
-            httpSession.invalidate();
-        }
-
+public class WrongNodeAuthenticationException extends AuthenticationException {
+    public WrongNodeAuthenticationException(String msg) {
+        super(msg);
     }
-
 }
