@@ -21,7 +21,6 @@
 package org.fao.geonet.kernel.security.shibboleth;
 
 import org.fao.geonet.ApplicationContextHolder;
-import org.fao.geonet.constants.Geonet;
 import org.fao.geonet.kernel.security.shibboleth.ShibbolethUserUtils.MinimalUser;
 import org.fao.geonet.utils.Log;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +30,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.web.filter.GenericFilterBean;
-
 
 import java.io.IOException;
 
@@ -70,8 +68,8 @@ public class ShibbolethPreAuthFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
-    	
-		if (Log.isDebugEnabled(Log.JEEVES)) {
+
+        if (Log.isDebugEnabled(Log.JEEVES)) {
             try {
                 Log.debug(Log.JEEVES,
                     "Performing Shibboleth pre-auth check. Existing auth is "
@@ -84,18 +82,18 @@ public class ShibbolethPreAuthFilter extends GenericFilterBean {
         ShibbolethUserConfiguration configuration = ApplicationContextHolder.get().getBean(ShibbolethUserConfiguration.class);
         ShibbolethUserUtils utils = ApplicationContextHolder.get().getBean(ShibbolethUserUtils.class);
 
+
         HttpServletRequest hreq = (HttpServletRequest) request;
-        
+
         String username = "UNIDENTIFIED";
         try {
             Authentication currentUser = SecurityContextHolder.getContext()
                 .getAuthentication();
-            
             MinimalUser minimal = MinimalUser.create(request, configuration);
 
             if (minimal != null) { // for logging only
                 username = minimal.getUsername();
-                
+
                 if (Log.isDebugEnabled(Log.JEEVES)) {
                     Log.debug(Log.JEEVES,
                         "Found Shibboleth credentials for user " + username);
@@ -113,13 +111,14 @@ public class ShibbolethPreAuthFilter extends GenericFilterBean {
                 || !currentUser.getName().equalsIgnoreCase(_uid))
                 // Shibboleth logged another user
                 && minimal != null) { // valid headers found
+
                 if (Log.isDebugEnabled(Log.JEEVES)) {
                     Log.debug(Log.JEEVES,
                         "Trying to authenticate via Shibboleth...");
                 }
 
                 UserDetails user = utils.setupUser(request, configuration);
-                
+
                 if (user != null) {
                     //mark user as logged in with shibboleth key
                     req.getSession().setAttribute(SHIB_KEY, true);
@@ -138,11 +137,10 @@ public class ShibbolethPreAuthFilter extends GenericFilterBean {
 
                     Log.info(Log.JEEVES, "User '" + user.getUsername()
                         + "' properly authenticated via Shibboleth");
-                    
-                    HttpServletResponse hresp = (HttpServletResponse) response;    
-                    
-                    /*if (requestCache != null) {
-                    	
+
+                    HttpServletResponse hresp = (HttpServletResponse) response;
+
+                    if (requestCache != null) {
                         String redirect = null;
 
                         SavedRequest savedReq = requestCache.getRequest(hreq,
@@ -168,11 +166,8 @@ public class ShibbolethPreAuthFilter extends GenericFilterBean {
                             hresp.sendRedirect(redirect);
                             return; // no further chain processing allowed
                         }
-                    }*/
-                    
-                    hresp.sendRedirect("/" + Geonet.GEONETWORK);
-                    return; // no further chain processing allowed
-                    
+                    }
+
                 } else {
                     Log.warning(Log.JEEVES,
                         "Error in GN shibboleth precedures handling user '"
@@ -181,7 +176,6 @@ public class ShibbolethPreAuthFilter extends GenericFilterBean {
             } else if (SecurityContextHolder.getContext().getAuthentication() != null
                 && SecurityContextHolder.getContext().getAuthentication()
                 .isAuthenticated() && minimal == null) {
-            	Log.warning(Geonet.DATA_MANAGER, "ShibbolethPreAuthFilter, else if condition..");
                 // Are we logged out?
                 if (req.getSession().getAttribute(SHIB_KEY) != null) {
                     req.getSession().removeAttribute(SHIB_KEY);
@@ -193,6 +187,7 @@ public class ShibbolethPreAuthFilter extends GenericFilterBean {
             Log.warning(Log.JEEVES, "Error during Shibboleth login for user "
                 + username + ": " + ex.getMessage(), ex);
         }
+
         chain.doFilter(request, response);
     }
 

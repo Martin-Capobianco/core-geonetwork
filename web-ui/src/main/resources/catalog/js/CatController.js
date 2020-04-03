@@ -98,6 +98,11 @@ goog.require('gn_alert');
           'fluidHeaderLayout': true,
           'showGNName': true
         },
+        'cookieWarning': {
+          'enabled': true,
+          'cookieWarningMoreInfoLink': '',
+          'cookieWarningRejectLink': ''
+        },
         'home': {
           'enabled': true,
           'appUrl': '../../{{node}}/{{lang}}/catalog.search#/home',
@@ -471,20 +476,9 @@ goog.require('gn_alert');
              gnExternalViewer, gnAlertService) {
       $scope.version = '0.0.1';
       var defaultNode = 'srv';
-      $scope.activeTab = '/home';
-      //Display or not the admin menu
-      if ($location.absUrl().indexOf('/admin.console') != -1) {
-        $scope.viewMenuAdmin = true;
-      }else {$scope.viewMenuAdmin = false}
-      //Update Links for social media
+
+      // Links for social media
       $scope.socialMediaLink = $location.absUrl();
-      $scope.$on('$locationChangeSuccess', function(event) {
-        console.log('$location.path() --> ' + $location.path());
-        $scope.activeTab = $location.path();
-        $scope.socialMediaLink = $location.absUrl();
-        $scope.showSocialMediaLink =
-            ($scope.socialMediaLink.indexOf('/metadata/') != -1);
-      });
       $scope.getPermalink = gnUtilityService.getPermalink;
       $scope.fluidEditorLayout = gnGlobalSettings.gnCfg.mods.editor.fluidEditorLayout;
       $scope.fluidHeaderLayout = gnGlobalSettings.gnCfg.mods.header.fluidHeaderLayout;
@@ -558,10 +552,6 @@ goog.require('gn_alert');
       $scope.isExternalViewerEnabled = gnExternalViewer.isEnabled();
       $scope.externalViewerUrl = gnExternalViewer.getBaseUrl();
 
-      $scope.pages = {
-        home: 'home',
-        signin: 'shib.user.login'
-      };
 
       $scope.layout = {
         hideTopToolBar: false

@@ -50,7 +50,6 @@ public class LogoutUserSessionHandler implements LogoutHandler {
                 UserSession userSession = (UserSession) tmp;
                 userSession.clear();
             }
-            httpSession.invalidate();
         }
 
     }
