@@ -81,8 +81,8 @@
         // Set the route only if not same as before //Joseph - url shows eCatId instead of UUID. 
         formatter = gnSearchLocation.getFormatter();
         gnMdViewObj.usingFormatter = formatter !== undefined;
-        //this.setLocationUuid(md.getUuid(), formatter);
-        this.setLocationUuid(md.geteCatId(), formatter);
+        this.setLocationUuid(md.getUuid(), formatter);
+        //this.setLocationUuid(md.geteCatId(), formatter);
         
         gnUtilityService.scrollTo();
 

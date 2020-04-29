@@ -180,25 +180,6 @@
               </div>
             </form>
             <br/>
-            <div class="row">
-              <div class="gn-results-heading col-md-offset-3">
-                <div data-search-filter-tags data-use-location-parameters="false"
-                     data-ng-show="isFilterTagsDisplayed"></div>
-              </div>
-            </div>
-			<div class="row" ng-if= "user.isUserAdminOrMore()">
-				<div class="col-md-6">
-					<div class="input-group gn-form-any">
-					<span class="input-group-addon"><label>Search by XPath...</label></span>
-				  	<input type="text"  class="form-control"  data-ng-model="obj.xpath"  placeholder="Search by XPath..." />
-					<div class="input-group-btn">
-					  <button type="button"  data-ng-click="triggerXPathSearch()"  class="btn btn-primary">
-						&nbsp;&nbsp;<i class="fa fa-search"></i>&nbsp;&nbsp;</button>
-					</div>
-				  </div>
-				</div>
-			</div>
-            <br/>
             <div class="row"
                  data-ng-show="searchResults.records.length > 0">
               <div class="col-md-offset-3 col-md-4 relative">
@@ -235,23 +216,15 @@
                 </div>
               </div>
               <div class="col-md-9">
-                <div class="gn-results-heading">
-                  <div data-gn-facet-breadcrumb="currentFacets"></div>
-                </div>
             <span class="loading fa fa-spinner fa-spin"
                   data-ng-show="searching"></span>
-		    <span class="loading fa fa-spinner fa-spin"
-					data-ng-show="stat.searching"></span>
+
                 <div class="alert alert-warning" role="alert"
                      ng-if="!searching && searchResults.count == 0">
                   <i class="fa fa-frown-o"></i>
                   <span data-translate="">zarooResult</span>
                 </div>
-				<div class="alert alert-warning" role="alert"
-	                	ng-if="stat.background">
-	            	<i class="fa fa-frown-o"></i>
-	            	<span data-translate="">Another Xpath search executing in the backgorund. Try after sometime.</span>
-	          	</div>
+
                 <div data-ng-show="searchResults.records.length > 0"
                      data-gn-results-container=""
                      data-search-results="searchResults"
